@@ -1,0 +1,64 @@
+rm -rf /opt/wildfly-10.1.0.Final/standalone/deployments/arbiochem.war
+
+cp -r build-file/arbiochem_war \
+  /opt/wildfly-10.1.0.Final/standalone/deployments/arbiochem.war
+
+touch /opt/wildfly-10.1.0.Final/standalone/deployments/arbiochem.war.dodeploy
+
+=================================================================================
+
+
+Exemple - Creation saisie produit simple
+
+Table : ProduitSimple
+
+CREATE TABLE PRODUIT_SIMPLE (
+    ID VARCHAR2(20) PRIMARY KEY,
+    NOM VARCHAR2(255),
+    IDCATEGORIE VARCHAR2(20)
+);
+
+CREATE OR REPLACE FUNCTION getSeqProduitSimple RETURN NUMBER IS
+  v_next NUMBER;
+BEGIN
+  SELECT NVL(MAX(TO_NUMBER(SUBSTR(ID, 4))), 0) + 1
+  INTO v_next
+  FROM PRODUIT_SIMPLE;
+
+  RETURN v_next;
+END;
+/
+
+=================================================================================
+
+Lors de la creation de nouvelles tables :
+
+docker exec -it oracle11g-ee bash
+sqlplus / as sysdba
+CONNECT arbiochemstandard/arbiochemstandard@//localhost:1521/EE.oracle.docker;
+SELECT USER FROM dual; # verifier si on est bien connecte
+** coller script SQL **
+
+// import script sql 
+// @/home/nyavo/Downloads/akoho/projet-standard-copie/arbiochem-war/web/pages/maintenance/ressources/2026-10-05-acheminement-poules-pondeuses.sql
+docker cp "/home/nyavo/Downloads/akoho/projet-standard - Copie/arbiochem-war/web/pages/maintenance/ressources/2026-10-05-acheminement-poules-pondeuses.sql" oracle11g-ee:/tmp/script.sql
+
+// 
+docker cp "/home/nyavo/Downloads/akoho/projet-standard - Copie/arbiochem-war/web/pages/maintenance/ressources/2026-10-05-acheminement-poules-pondeuses-diagnostic.sql" oracle11g-ee:/
+tmp/diag.sql
+docker cp "/home/nyavo/Downloads/akoho/projet-standard - Copie/arbiochem-war/web/pages/maintenance/ressources/2026-10-05-acheminement-poules-pondeuses-reset.sql" oracle11g-ee:/
+tmp/reset.sql
+
+- pour les fonctions :
+CREATE OR REPLACE FUNCTION getSeqProduitSimple RETURN NUMBER IS
+    v_next NUMBER;
+BEGIN
+    SELECT NVL(MAX(TO_NUMBER(SUBSTR(ID, 4))), 0) + 1
+    INTO v_next
+    FROM PRODUIT_SIMPLE;
+
+    RETURN v_next;
+END;
+/
+(Pour une fonction Oracle, le / doit être seul sur sa ligne)
+

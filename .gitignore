@@ -1,0 +1,44 @@
+# ----- Sorties de build Ant -----
+build-file/
+arbiochem_war/
+arbiochem_jar/
+/lib/
+*.class
+*.war
+*.ear
+*.jar.tmp
+arbiochem-war/web/dateBuild.txt
+
+# Décompilation (vineflower)
+decompiled/
+
+# Compilation codebar-generator
+codebar-generator/bin/
+
+# ----- IDE / Éditeurs -----
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*~
+
+# ----- OS -----
+.DS_Store
+Thumbs.db
+
+# ----- Logs / temporaires -----
+*.log
+*.tmp
+*.bak
+*.cache
+
+# ----- Python (google-adk) -----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
